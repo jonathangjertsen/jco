@@ -21,7 +21,7 @@ def help(*args):
     """Help."""
     print("Available commands:")
     for command in Command.commands:
-        print("\t{}: {}".format(command, commands[command].__doc__))
+        print("\t{}: {}".format(command, Command.commands[command].__doc__))
     print()
     print("Available options (space-separated list of <option>=<value>):")
     print(Option.opt_info())
@@ -50,26 +50,31 @@ def n(args):
 
 
 def main():
-    invocation = sys.argv[1:]
+    cli_args = sys.argv[1:]
 
-    if not invocation:
+    if not cli_args:
         help()
         return
 
-    command = invocation[0]
+    command = cli_args[0]
     command_args = []
 
-    for i in range(1, len(invocation)):
-        if "=" in invocation[i]:
-            key, value = invocation[i].split("=")
+    for i in range(1, len(cli_args)):
+        if "=" in cli_args[i]:
+            key, value = cli_args[i].split("=")
             jco.Option.set(key, value)
         else:
-            command_args.append(invocation[i])
+            command_args.append(cli_args[i])
 
     if command in Command.commands:
         Command.commands[command](command_args)
     else:
-        print(f"Available commands: {list(commands)}")
+        try:
+            n_args = [command] + command_args
+            n(n_args)
+        except Exception as exc:
+            print(f"Tried running 'jco n {' '.join(n_args)}', got error: {exc}")
+            print(f"Available commands: {list(Command.commands)}")
 
 
 def entry():

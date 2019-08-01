@@ -27,7 +27,7 @@ Available options (space-separated list of <option>=<value>):
 Then check that you can run some simple queries
 
 ```
-c:\path\to\repo>jco n 187
+c:\path\to\repo>jco 187
 ╒═══════════════╤═══════╤═══════╤══════════╕
 │               │   Dec │ Hex   │      Bin │
 ╞═══════════════╪═══════╪═══════╪══════════╡
@@ -40,7 +40,7 @@ c:\path\to\repo>jco n 187
 │ popcount(A)   │     6 │ 06    │ 00000110 │
 ╘═══════════════╧═══════╧═══════╧══════════╛
 
-c:\path\to\repo>jco n 187 0x981 n=16 w=8
+c:\path\to\repo>jco 187 0x981 n=16 w=8
 ╒════════════════╤═══════════╤═══════════╤══════════════════╕
 │                │ Dec       │ Hex       │ Bin              │
 ╞════════════════╪═══════════╪═══════════╪══════════════════╡
