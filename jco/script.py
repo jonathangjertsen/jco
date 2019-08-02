@@ -10,6 +10,7 @@ class Command(object):
 
     def __init__(self, func):
         self.func = func
+        self.__doc__ = func.__doc__
         Command.commands[func.__name__] = self
 
     def __call__(self, *args, **kwargs):
@@ -41,6 +42,7 @@ def two(args):
 
 @Command
 def n(args):
+    """Info about 1 or 2 numbers (calls jco one or jco two)"""
     if len(args) == 1:
         one(args)
     elif len(args) == 2:
@@ -48,6 +50,11 @@ def n(args):
     else:
         raise JcoTerminate(f"n does not support {len(args)} args")
 
+
+@Command
+def bf(args):
+    """jco bitfield <field:nbits,field:nbits,...,field:nbits> <num>"""
+    print(jco.bitfield(*args))
 
 def main():
     cli_args = sys.argv[1:]
@@ -81,7 +88,7 @@ def entry():
     try:
         main()
     except JcoTerminate as jt:
-        print(jt)
+        print("fatal:", jt)
 
 
 if __name__ == "__main__":

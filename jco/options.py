@@ -38,7 +38,7 @@ class Option(object):
         )
 
 
-NBits = Option("n", "n_bits", default=8, help="Number of bits")
+NBits = Option("n", "n_bits", default=-1, help="Number of bits")
 WordSize = Option("w", "word_size", default=4, help="Word size")
 Overflow = Option(
     "o", "overflow", default=1, help="Whether to overflow negative numbers"
@@ -48,4 +48,10 @@ Format = Option(
     "format",
     default="fancy_grid",
     help="Table format (compatible with tabulate package)",
+)
+MsbFirst = Option(
+    "m",
+    "msbfirst",
+    default=1,
+    help="Whether to put the most significant bit first in a bitstring",
 )
