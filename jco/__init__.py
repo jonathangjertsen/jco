@@ -115,7 +115,7 @@ def checklen(strings, n):
 def _one(string, *, name="A"):
     a = Int(string, name)
     if NBits.value == -1:
-        NBits.value = nbits(a.int)
+        NBits.value = min_num_bits(a.int)
     one_comp = Int(ones_complement(a.out), f"~{name} ({NBits.value} bits)")
     one_comp.raw = True
     two_comp = Int(twos_complement(a.out), f"twos_compl({name}, {NBits.value} bits)")
