@@ -56,6 +56,7 @@ def bf(args):
     """jco bitfield <field:nbits,field:nbits,...,field:nbits> <num>"""
     print(jco.bitfield(*args))
 
+
 def main(cli_args):
     if not cli_args:
         help()
@@ -78,8 +79,10 @@ def main(cli_args):
             n_args = [command] + command_args
             n(n_args)
         except Exception as exc:
-            info = f"Tried running 'jco n {' '.join(n_args)}', got error: {exc}\n" \
-                   f"Available commands: {list(Command.commands)}"
+            info = (
+                f"Tried running 'jco n {' '.join(n_args)}', got error: {exc}\n"
+                f"Available commands: {list(Command.commands)}"
+            )
             raise JcoTerminate(info) from None
 
 

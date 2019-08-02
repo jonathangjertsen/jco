@@ -56,6 +56,7 @@ def min_num_bits(a):
         return undefined
     return math.ceil(math.log(a, 2))
 
+
 class Int(object):
     def __init__(self, inp, name):
         try:
@@ -160,6 +161,7 @@ def two(*args, **kwargs):
         [data.row() if hasattr(data, "row") else data for data in _two(*args, **kwargs)]
     )
 
+
 def parse_spec(spec):
     try:
         spec = spec.strip()
@@ -168,6 +170,7 @@ def parse_spec(spec):
     except Exception as exc:
         raise JcoTerminate(f"Couldn't parse bitfield '{spec}' (exception='{exc}')")
 
+
 def bitfield(spec_str, numstr):
     num = Int(numstr, "num")
     spec = parse_spec(spec_str)
@@ -175,7 +178,9 @@ def bitfield(spec_str, numstr):
     headers = [""] + [f"{name} [{_nbits}]" for name, _nbits in spec]
     num_nbits = min_num_bits(num.int)
     if num_nbits > NBits.value:
-        raise JcoTerminate(f"Bit field has total width {NBits.value}, but {numstr} is a {num_nbits}-bit number")
+        raise JcoTerminate(
+            f"Bit field has total width {NBits.value}, but {numstr} is a {num_nbits}-bit number"
+        )
     else:
         bits = num.bin
         if not MsbFirst.value:
@@ -183,7 +188,7 @@ def bitfield(spec_str, numstr):
         field_values = []
         cursor = 0
         for name, nbits in spec:
-            field_values.append(bits[cursor:cursor+nbits])
+            field_values.append(bits[cursor : cursor + nbits])
             cursor += nbits
 
     rows = [
@@ -191,4 +196,10 @@ def bitfield(spec_str, numstr):
         ["Dec"] + [int(value, 2) for value in field_values],
         ["Hex"] + [hex(int(value, 2)).replace("0x", "") for value in field_values],
     ]
-    return tabulate(rows, tablefmt=Format.value, headers=headers, numalign="center", stralign="center")
+    return tabulate(
+        rows,
+        tablefmt=Format.value,
+        headers=headers,
+        numalign="center",
+        stralign="center",
+    )
