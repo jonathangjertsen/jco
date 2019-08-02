@@ -51,7 +51,7 @@ def hamming_distance(a, b):
     return sum(e1 != e2 for e1, e2 in zip(a, b))
 
 
-def nbits(a):
+def min_num_bits(a):
     if a is undefined:
         return undefined
     return math.ceil(math.log(a, 2))
@@ -116,12 +116,12 @@ def _one(string, *, name="A"):
     a = Int(string, name)
     if NBits.value == -1:
         NBits.value = nbits(a.int)
-    one_comp = Int(ones_complement(a.out), f"~{name}")
+    one_comp = Int(ones_complement(a.out), f"~{name} ({NBits.value} bits)")
     one_comp.raw = True
-    two_comp = Int(twos_complement(a.out), f"twos_compl({name})")
+    two_comp = Int(twos_complement(a.out), f"twos_compl({name}, {NBits.value} bits)")
     two_comp.raw = True
     pc = Int(popcount(a.out), f"popcount({name})")
-    nb = Int(nbits(a.out), f"nbits({name})")
+    nb = Int(min_num_bits(a.out), f"nbits({name})")
     shift = Int(a.int >> WordSize.value, f"{name} >> {WordSize.value}")
     return [a, one_comp, two_comp, pc, nb, shift]
 
@@ -136,7 +136,7 @@ def _two(first, second):
     b = Int(second, "B")
 
     if NBits.value == -1:
-        NBits.value = max(nbits(a.int), nbits(b.int))
+        NBits.value = max(min_num_bits(a.int), min_num_bits(b.int))
 
     return [
         *_one(first, name="A"),
@@ -171,9 +171,9 @@ def parse_spec(spec):
 def bitfield(spec_str, numstr):
     num = Int(numstr, "num")
     spec = parse_spec(spec_str)
-    NBits.value = sum(nbits for name, nbits in spec)
-    headers = [""] + [f"{name} [{nbits}]" for name, nbits in spec]
-    num_nbits = nbits(num.int)
+    NBits.value = sum(_nbits for name, _nbits in spec)
+    headers = [""] + [f"{name} [{_nbits}]" for name, _nbits in spec]
+    num_nbits = min_num_bits(num.int)
     if num_nbits > NBits.value:
         raise JcoTerminate(f"Bit field has total width {NBits.value}, but {numstr} is a {num_nbits}-bit number")
     else:
